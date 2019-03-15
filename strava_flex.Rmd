@@ -1,0 +1,66 @@
+---
+title: "Strava-flex"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(rStrava)
+library(jsonlite)
+library(ggplot2)
+library(plotly)
+
+strava_keys = fromJSON('keys.json')$strava
+stoken <- httr::config(token = strava_oauth(strava_keys$app_name,
+                                            strava_keys$client_id,
+                                            strava_keys$client_secret))
+
+activities <- get_activity_list(stoken)
+athlete <- get_athlete(stoken)
+df <- compile_activities(activities)
+```
+
+Sidebar {.sidebar}
+=======================================================================
+### Athlete Information
+```{r}
+athlete$firstname
+athlete$lastname
+athlete$city
+athlete$country
+```
+
+Activities
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+### Type of workouts
+```{r}
+p <- ggplot(df, aes(type)) +
+  geom_bar()
+ggplotly(p)
+```
+
+### Length of workouts
+```{r}
+p <- ggplot(df, aes(x=distance, color=type)) +
+  geom_histogram(fill="white", alpha=0.5, position="identity")
+ggplotly(p)
+```
+
+Row
+-----------------------------------------------------------------------
+### Some plot
+```{r}
+```
+
+### Some other plot
+```{r}
+```
+
+Other Information
+=======================================================================
