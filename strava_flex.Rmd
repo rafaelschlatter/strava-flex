@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    source_code: embed
 ---
 
 ```{r setup, include=FALSE}
@@ -12,8 +13,10 @@ library(rStrava)
 library(jsonlite)
 library(ggplot2)
 library(plotly)
+library(highcharter)
 
 strava_keys = fromJSON('keys.json')$strava
+strava_goals = fromJSON('keys.json')$goals
 stoken <- httr::config(token = strava_oauth(strava_keys$app_name,
                                             strava_keys$client_id,
                                             strava_keys$client_secret))
@@ -34,7 +37,7 @@ athlete$city
 athlete$country
 ```
 
-Activities
+Activities {data-icon="fa-signal"}
 =======================================================================
 
 Row
@@ -57,15 +60,29 @@ Row
 -----------------------------------------------------------------------
 ### Distance of workouts per type
 ```{r}
-p <- ggplot(df, aes(x=rev(row), y=distance)) +
-  geom_line() +
-  facet_grid(rows = vars(type))
-ggplotly(p)
+hchart(df$type, name="Number of workouts")
 ```
 
 ### Some other plot
 ```{r}
+hchart(df$distance, name="Number of workouts")
 ```
 
-Other Information
+Year-to-date statistics {data-icon="fa-chart-bar"}
 =======================================================================
+Column
+-----------------------------------------------------------------------
+### Statistics
+```{r}
+```
+
+Column
+-----------------------------------------------------------------------
+### Yearly goal
+```{r}
+gauge(91, min = 0, max = strava_goals$yearly, symbol = '%', gaugeSectors(
+  success = c(80, 100), warning = c(40, 79), danger = c(0, 39)
+))
+```
+
+### Montly distance
