@@ -21,6 +21,7 @@ stoken <- httr::config(token = strava_oauth(strava_keys$app_name,
 activities <- get_activity_list(stoken)
 athlete <- get_athlete(stoken)
 df <- compile_activities(activities)
+df$row <- seq.int(nrow(df))
 ```
 
 Sidebar {.sidebar}
@@ -54,8 +55,12 @@ ggplotly(p)
 
 Row
 -----------------------------------------------------------------------
-### Some plot
+### Distance of workouts per type
 ```{r}
+p <- ggplot(df, aes(x=rev(row), y=distance)) +
+  geom_line() +
+  facet_grid(rows = vars(type))
+ggplotly(p)
 ```
 
 ### Some other plot
