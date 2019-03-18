@@ -17,6 +17,7 @@ library(ggplot2)
 library(plotly)
 library(highcharter)
 library(shiny)
+library(lubridate)
 
 strava_keys = fromJSON('keys.json')$strava
 strava_goals = fromJSON('keys.json')$goals
@@ -29,6 +30,8 @@ athlete <- get_athlete(stoken)
 df <- compile_activities(activities)
 df$row <- seq.int(nrow(df))
 df$calendar_date <- as.Date(df$start_date)
+df$calendar_year <- lubridate::year(df$start_date)
+df$calendar_month <- lubridate::month(df$start_date)
 ```
 
 Sidebar {.sidebar}
@@ -58,6 +61,22 @@ second = first * 2
 gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', gaugeSectors(
   success = c(second+1, strava_goals$yearly_km), warning = c(first+1, second), danger = c(0, first)
 ))
+```
+
+### Monthly distance (all activity types)
+```{r}
+yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
+monthly_dist <- aggregate(yearly_activites$distance, list(yearly_activites$calendar_month), sum, na.rm = TRUE)
+
+hc <- highchart() %>% 
+  hc_chart(type = "bar") %>% 
+  hc_xAxis(categories = c("Januar", "Februar", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December")) %>% 
+  hc_yAxis(min = 0, title = list(text = "Total distance in km")) %>%
+  hc_add_series(name = "Distance (km)", data = monthly_dist$x, color = "#FF7900")
+
+hc
+
 ```
 
 Column
@@ -98,6 +117,7 @@ gauge(weekly_min, min = 0, max = strava_goals$weekly_min, symbol = 'min', gaugeS
 Column
 -----------------------------------------------------------------------
 ### Placeholder
+Some other goal I set myself.
 ```{r}
 yearly_activites = subset(df, calendar_date > as.Date("2018-12-31"))
 current_distance = round(sum(yearly_activites$distance), digits = 1)
