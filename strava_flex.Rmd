@@ -2,7 +2,7 @@
 title: "Strava-flex"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
     source_code: https://github.com/rafaelschlatter/strava-flex
     social: menu
@@ -14,10 +14,10 @@ library(flexdashboard)
 library(rStrava)
 library(jsonlite)
 library(ggplot2)
+library(ggthemes)
 library(plotly)
 library(highcharter)
-library(shiny)
-library(lubridate)
+library(dplyr)
 
 strava_keys = fromJSON('keys.json')$strava
 strava_goals = fromJSON('keys.json')$goals
@@ -32,27 +32,28 @@ df$row <- seq.int(nrow(df))
 df$calendar_date <- as.Date(df$start_date)
 df$calendar_year <- lubridate::year(df$start_date)
 df$calendar_month <- lubridate::month(df$start_date)
+df$calendar_week <- lubridate::week(df$start_date)
+df$weekday <- weekdays(as.Date(df$start_date))
+
+yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
 ```
 
 Sidebar {.sidebar}
 =======================================================================
 ### Athlete Information
-```{r}
-athlete$firstname
-athlete$lastname
-athlete$city
-athlete$country
-```
+First name: `r athlete$firstname`  
+Last name: `r athlete$lastname`  
+City: `r athlete$city`  
+Country: `r athlete$country`  
 
 
 Year-to-date statistics {data-icon="fa-chart-bar"}
 =======================================================================
-Column
+Row
 -----------------------------------------------------------------------
 ### Yearly goal
 Your current yearly km goal is set to `r strava_goals$yearly_km`km.
 ```{r}
-yearly_activites = subset(df, calendar_date > as.Date("2018-12-31"))
 current_distance = round(sum(yearly_activites$distance), digits = 1)
 
 first = strava_goals$yearly_km / 3
@@ -63,24 +64,6 @@ gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', ga
 ))
 ```
 
-### Monthly distance (all activity types)
-```{r}
-yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
-monthly_dist <- aggregate(yearly_activites$distance, list(yearly_activites$calendar_month), sum, na.rm = TRUE)
-
-hc <- highchart() %>% 
-  hc_chart(type = "bar") %>% 
-  hc_xAxis(categories = c("Januar", "Februar", "March", "April", "May", "June",
-                          "July", "August", "September", "October", "November", "December")) %>% 
-  hc_yAxis(min = 0, title = list(text = "Total distance in km")) %>%
-  hc_add_series(name = "Distance (km)", data = monthly_dist$x, color = "#FF7900")
-
-hc
-
-```
-
-Column
------------------------------------------------------------------------
 ### Weekly activity minutes
 Your current weekly activity goal is set to `r strava_goals$weekly_min` min. 
 ```{r}
@@ -114,8 +97,6 @@ gauge(weekly_min, min = 0, max = strava_goals$weekly_min, symbol = 'min', gaugeS
 ))
 ```
 
-Column
------------------------------------------------------------------------
 ### Placeholder
 Some other goal I set myself.
 ```{r}
@@ -125,6 +106,31 @@ current_distance = round(sum(yearly_activites$distance), digits = 1)
 gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', gaugeSectors(
   success = c(80, 100), warning = c(40, 79), danger = c(0, 39)
 ))
+```
+
+
+Row
+-----------------------------------------------------------------------
+### Monthly distance (all activity types)
+```{r}
+monthly_dist <- aggregate(yearly_activites$distance, list(yearly_activites$calendar_month), sum, na.rm = TRUE)
+
+hc <- highchart() %>% 
+  hc_chart(type = "bar") %>% 
+  hc_xAxis(categories = c("Januar", "Februar", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December")) %>% 
+  hc_yAxis(min = 0, title = list(text = "Total distance in km")) %>%
+  hc_add_series(name = "Distance (km)", data = monthly_dist$x, color = "#FF7900")
+
+hc
+```
+
+### Activity heatmap
+```{r}
+heatmap_data <- group_by(yearly_activites, calendar_week, weekday) %>% summarize(dist = sum(distance))
+hc <- hchart(heatmap_data, "heatmap", hcaes(x = calendar_week, y = weekday, value = dist)) %>%
+  hc_xAxis(title = list(text = "Calendar week"))
+hc
 ```
 
 
