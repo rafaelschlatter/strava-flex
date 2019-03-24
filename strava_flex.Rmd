@@ -2,6 +2,7 @@
 title: "Strava-flex"
 output: 
   flexdashboard::flex_dashboard:
+    theme: cosmo
     orientation: rows
     vertical_layout: fill
     source_code: https://github.com/rafaelschlatter/strava-flex
@@ -35,7 +36,7 @@ df$calendar_year <- lubridate::year(df$start_date)
 df$calendar_month <- lubridate::month(df$start_date)
 df$calendar_week <- lubridate::week(df$start_date)
 df$weekday <- weekdays(as.Date(df$start_date))
-df$month <- month.abb[df$calendar_month]
+df$month <- month.name[df$calendar_month]
 
 yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
 ```
@@ -126,9 +127,8 @@ Row {data-height = 650}
 ```{r}
 monthly_dist <- group_by(yearly_activites, month, type) %>% summarize(dist = sum(distance))
 monthly_dist_wide <- spread(monthly_dist, type, dist)
-monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = c("Jan", "Feb", "Mar",
-  "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-monthly_dist_wide$month <-sort(monthly_dist_wide$month)
+monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
+monthly_dist_wide <- monthly_dist_wide[order(monthly_dist_wide$month), ]
 
 
 hc <- highchart() %>% 
@@ -141,7 +141,6 @@ hc <- highchart() %>%
   hc_series(list(name = "Running (km)", data = monthly_dist_wide$Run),
             list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki))  %>%
   hc_add_theme(hc_theme_google())
-
 hc
 ```
 
