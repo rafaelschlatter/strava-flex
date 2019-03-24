@@ -41,10 +41,10 @@ yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
 Sidebar {.sidebar}
 =======================================================================
 ### Athlete Information
-First name: `r athlete$firstname`  
-Last name: `r athlete$lastname`  
-City: `r athlete$city`  
-Country: `r athlete$country`  
+**First name**: `r athlete$firstname`  
+**Last name**: `r athlete$lastname`  
+**City**: `r athlete$city`  
+**Country**: `r athlete$country`  
 
 
 Year-to-date statistics {data-icon="fa-chart-bar"}
@@ -52,7 +52,9 @@ Year-to-date statistics {data-icon="fa-chart-bar"}
 Row
 -----------------------------------------------------------------------
 ### Yearly goal
-Your current yearly km goal is set to `r strava_goals$yearly_km`km.
+Your current yearly km goal is set to `r strava_goals$yearly_km`km.  
+  
+  
 ```{r}
 current_distance = round(sum(yearly_activites$distance), digits = 1)
 
@@ -65,7 +67,9 @@ gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', ga
 ```
 
 ### Weekly activity minutes
-Your current weekly activity goal is set to `r strava_goals$weekly_min` min. 
+Your current weekly activity goal is set to `r strava_goals$weekly_min` min.  
+  
+  
 ```{r}
 current_date <- Sys.Date()
 current_day <- weekdays(current_date)
@@ -97,17 +101,26 @@ gauge(weekly_min, min = 0, max = strava_goals$weekly_min, symbol = 'min', gaugeS
 ))
 ```
 
-### Placeholder
-Some other goal I set myself.
+### Activities by type
 ```{r}
-yearly_activites = subset(df, calendar_date > as.Date("2018-12-31"))
-current_distance = round(sum(yearly_activites$distance), digits = 1)
+activity_types <- as.data.frame(table(yearly_activites$type))
+activity_types$Var1 <- factor(activity_types$Var1)
 
-gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', gaugeSectors(
-  success = c(80, 100), warning = c(40, 79), danger = c(0, 39)
-))
+tooltip <- JS("function(){
+  return this.point.x + ':<br/>' +
+  this.y + ' activities<br/>' +
+  Highcharts.numberFormat(this.percentage, 2) + '%<br />';
+}")
+
+hc <- highchart() %>% 
+  hc_chart(type = "pie") %>% 
+  hc_add_series(name = "Activity type", data = activity_types$Freq) %>%
+  hc_yAxis(categories = activity_types$Var1) %>%
+  hc_tooltip(formatter = tooltip) %>%
+  hc_add_theme(hc_theme_google())
+
+hc
 ```
-
 
 Row
 -----------------------------------------------------------------------
@@ -120,7 +133,8 @@ hc <- highchart() %>%
   hc_xAxis(categories = c("Januar", "Februar", "March", "April", "May", "June",
                           "July", "August", "September", "October", "November", "December")) %>% 
   hc_yAxis(min = 0, title = list(text = "Total distance in km")) %>%
-  hc_add_series(name = "Distance (km)", data = monthly_dist$x, color = "#FF7900")
+  hc_add_series(name = "Distance (km)", data = monthly_dist$x) %>%
+  hc_add_theme(hc_theme_google())
 
 hc
 ```
@@ -128,48 +142,17 @@ hc
 ### Activity heatmap
 ```{r}
 heatmap_data <- group_by(yearly_activites, calendar_week, weekday) %>% summarize(dist = sum(distance))
+heatmap_data$weekday <- factor(heatmap_data$weekday, levels = c("Monday", "Tuesday", "Wednesday",
+                                                                "Thursday", "Friday", "Saturday", "Sunday"))
+
+tooltip <- JS("function(){
+  return 'Week ' + this.point.x + ', ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
+  'Distance: ' + Highcharts.numberFormat(this.point.value, 2) + 'km';
+}")
+
 hc <- hchart(heatmap_data, "heatmap", hcaes(x = calendar_week, y = weekday, value = dist)) %>%
-  hc_xAxis(title = list(text = "Calendar week"))
+  hc_xAxis(title = list(text = "Calendar week")) %>%
+  hc_tooltip(formatter = tooltip) %>%
+  hc_add_theme(hc_theme_google())
 hc
-```
-
-
-Activities {data-icon="fa-signal"}
-=======================================================================
-
-Row
------------------------------------------------------------------------
-### Type of workouts
-```{r}
-p <- ggplot(df, aes(type)) +
-  geom_bar()
-ggplotly(p)
-```
-
-### Length of workouts
-```{r}
-p <- ggplot(df, aes(x=distance, color=type)) +
-  geom_histogram(fill="white", alpha=0.5, position="identity")
-ggplotly(p)
-```
-
-Row
------------------------------------------------------------------------
-### Distance of workouts per type
-```{r}
-hchart(df$type, name="Number of workouts")
-```
-
-### Some other plot
-```{r}
-hchart(df$distance, name="Number of workouts")
-```
-
-
-All activities {data-icon="fa-strava"}
-=======================================================================
-Row
------------------------------------------------------------------------
-### Activities in table format
-```{r}
 ```
