@@ -20,12 +20,14 @@ library(plotly)
 library(highcharter)
 library(dplyr)
 library(tidyr)
+library(knitr)
 
 strava_keys = fromJSON('keys.json')$strava
 strava_goals = fromJSON('keys.json')$goals
 stoken <- httr::config(token = strava_oauth(strava_keys$app_name,
                                             strava_keys$client_id,
-                                            strava_keys$client_secret))
+                                            strava_keys$client_secret,
+                                            app_scope = 'view_private'))
 
 activities <- get_activity_list(stoken)
 athlete <- get_athlete(stoken)
@@ -38,7 +40,9 @@ df$calendar_week <- lubridate::week(df$start_date)
 df$weekday <- weekdays(as.Date(df$start_date))
 df$month <- month.name[df$calendar_month]
 
-yearly_activites <- subset(df, calendar_date > as.Date("2018-12-31"))
+y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.Date("2018-12-31"))
+y_2019 <- subset(df, calendar_date > as.Date("2018-12-31"))
+yearly_activites <- y_2019
 ```
 
 Sidebar {.sidebar}
@@ -49,6 +53,12 @@ Sidebar {.sidebar}
 **City**: `r athlete$city`  
 **Country**: `r athlete$country`  
 
+**Latest activity**: `r yearly_activites[1,]$calendar_date`
+
+### All-time Statistics
+**Distance**: `r round(sum(df$distance))`km  
+**Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)`hrs  
+**Number of activities**: `r length(df$id)`
 
 Year-to-date statistics {data-icon="fa-chart-bar"}
 =======================================================================
@@ -137,7 +147,15 @@ hc <- highchart() %>%
     stacking = "normal")
   ) %>% 
   hc_xAxis(categories = monthly_dist_wide$month) %>% 
-  hc_yAxis(min = 0, title = list(text = "Total distance in km")) %>%
+  hc_yAxis(min = 0, title = list(text = "Total distance in km"),
+           plotLines = list(
+                 list(
+                   label = list(text = "Goal"),
+                   color = "red",
+                   width = 2,
+                   value = strava_goals$montly_km
+                   )
+                 )) %>%
   hc_series(list(name = "Running (km)", data = monthly_dist_wide$Run),
             list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki))  %>%
   hc_add_theme(hc_theme_google())
