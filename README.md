@@ -22,7 +22,8 @@ Create a json file with the below structure, and save it in the same directory a
     "access_token": "YOUR-ACCESS-TOKEN"
   },
   "goals": {
-    "yearly_km": YOUR-KM-GOAL,
+    "yearly_km": YOUR-YEARLY-KM-GOAL,
+    "monthly_km": YOUR-MONTHLY-KM-GOAL,
     "weekly_min": YOUR-MIN-GOAL
   }
 }
