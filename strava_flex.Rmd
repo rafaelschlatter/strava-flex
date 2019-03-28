@@ -7,7 +7,6 @@ output:
     vertical_layout: fill
     source_code: https://github.com/rafaelschlatter/strava-flex
     social: menu
-#runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
