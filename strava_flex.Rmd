@@ -11,16 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(flexdashboard)
-library(rStrava)
-library(jsonlite)
-library(ggplot2)
-library(ggthemes)
-library(plotly)
-library(highcharter)
-library(dplyr)
-library(tidyr)
-library(knitr)
+source("install_packages.R")
 
 strava_keys = fromJSON('keys.json')$strava
 strava_goals = fromJSON('keys.json')$goals
