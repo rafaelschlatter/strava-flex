@@ -29,5 +29,7 @@ Create a json file with the below structure, and save it in the same directory a
 }
 ```
 
-### 2.3 Create the Docker container
-to be added ...
+### 2.3 Run the dashboard
+Open the file `strava_flex.Rmd` with RStudio and click the "knit" button. Within the R Markdown console, you will be asked to authenticate with Strava. Copy the provided link into your browser and refresh. The dashboard appears in the "Viewer" panel of RStudio. "Show in new window" opens a browser to display the dashboard.
+
+All dependencies are handled in the `install_packages.R` file.
