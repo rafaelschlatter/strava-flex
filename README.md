@@ -2,7 +2,7 @@
 
 ## 1. Description
 A flex dashboard to visualize your Strava activities.
-![screenshot](https://github.com/rafaelschlatter/strava-flex/resources/screenshot.jpeg)
+![screenshot](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot.jpg)
 
 ## 2. Usage
 ### 2.1 Register app with Strava
