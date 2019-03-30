@@ -12,7 +12,7 @@ To do so, follow the instructions here (step 1 and 2):
 <https://medium.com/@annthurium/getting-started-with-the-strava-api-a-tutorial-f3909496cd2d>
 
 ### 2.2 Create `keys.json` file
-Create a json file with the below structure, and save it in the same directory as the `strava_flex.Rmd` file (integer values in the goals section do not require quotation marks). Name the file `keys.json`. The dashboard will pick up these values when you run it.
+Create a json file with the below structure, and save it in the same directory as the `index.Rmd` file (integer values in the goals section do not require quotation marks). Name the file `keys.json`. The dashboard will pick up these values when you run it.
 
 ```javascript
 {
@@ -37,4 +37,4 @@ All dependencies are handled in the `install_packages.R` file. Set your working 
 rmarkdown::run()
 ```
 
-
+A browser window opens and you will be automatically authenticated with Strava, the dashboard appears in a new window.
