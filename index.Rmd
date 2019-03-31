@@ -50,7 +50,7 @@ Sidebar {.sidebar}
 **Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)`hrs  
 **Number of activities**: `r length(df$id)`
 
-Year-to-date statistics {data-icon="fa-chart-bar"}
+Year-to-date statistics
 =======================================================================
 Row {data-height = 350}
 -----------------------------------------------------------------------
@@ -167,6 +167,22 @@ hc <- hchart(heatmap_data, "heatmap", hcaes(x = calendar_week, y = weekday, valu
   hc_xAxis(title = list(text = "Calendar week")) %>%
   hc_colorAxis(stops = color_stops(10, rev(RColorBrewer::brewer.pal(10, "RdBu")))) %>%
   hc_tooltip(formatter = tooltip) %>%
+  hc_add_theme(hc_theme_google())
+hc
+```
+
+
+Performance
+=======================================================================
+```{r}
+# This works!
+str <- get_streams(stoken, id = 2248638974)
+
+
+hc <- highchart() %>% 
+  hc_chart(type = "line") %>% 
+  hc_xAxis(type = "datetime") %>%
+  hc_add_series(df, "line", hcaes(calendar_date, average_speed), name = "Avg. speed") %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
