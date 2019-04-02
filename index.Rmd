@@ -175,14 +175,30 @@ hc
 Performance
 =======================================================================
 ```{r}
-# This works!
-str <- get_streams(stoken, id = 2248638974)
+stream <- get_streams(stoken, id = 2248638974)
 
+stream_to_df <- function(stream) {
+  str_df <- data.frame(
+    time = I(stream[[2]][[2]]),
+    distance = I(stream[[3]][[2]]),
+    altitude = I(stream[[4]][[2]]),
+    heartrate = I(stream[[5]][[2]]),
+    cadence = I(stream[[6]][[2]]),
+    grade_smooth = I(stream[[7]][[2]]),
+    moving = I(stream[[8]][[2]]),
+    velocity_smooth = I(stream[[9]][[2]])
+  )
+}
+
+stream_df <- stream_to_df(stream)
 
 hc <- highchart() %>% 
   hc_chart(type = "line") %>% 
   hc_xAxis(type = "datetime") %>%
-  hc_add_series(df, "line", hcaes(calendar_date, average_speed), name = "Avg. speed") %>%
+  hc_add_series(stream_df, "line", hcaes(time, cadence), name = "Cadence") %>%
+  hc_add_series(stream_df, "line", hcaes(time, heartrate), name = "Heartrate") %>%
+  hc_add_series(stream_df, "line", hcaes(time, altitude), name = "altitude") %>%
+  hc_tooltip(sort = TRUE, table = TRUE) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
