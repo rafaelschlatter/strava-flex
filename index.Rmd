@@ -33,6 +33,31 @@ df$month <- month.name[df$calendar_month]
 y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.Date("2018-12-31"))
 y_2019 <- subset(df, calendar_date > as.Date("2018-12-31"))
 yearly_activites <- y_2019
+
+stream_to_df <- function(stream) {
+  for (i in seq(length(stream))) {
+    column_name = toString(stream[[i]]["type"])
+    column_data = unlist(stream[[i]]["data"])
+
+    # because cannot deal with this type yet
+    if (column_name == "latlng") {
+      next
+    }
+    if (i == 1) {
+      df <- data.frame(column_name=column_data)
+    }
+    else {
+      df[column_name]<-column_data
+    }
+  }
+  return(df)
+}
+
+get_latest_activity <- function(df, workout_type) {
+  type_activities <- df[df$type == workout_type, ] 
+  latest_id <- type_activities["id"][1, ]
+  return(latest_id)
+}
 ```
 
 Sidebar {.sidebar}
@@ -50,7 +75,7 @@ Sidebar {.sidebar}
 **Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)`hrs  
 **Number of activities**: `r length(df$id)`
 
-Year-to-date statistics {data-icon="fa-chart-bar"}
+Year-to-date statistics
 =======================================================================
 Row {data-height = 350}
 -----------------------------------------------------------------------
@@ -167,6 +192,54 @@ hc <- hchart(heatmap_data, "heatmap", hcaes(x = calendar_week, y = weekday, valu
   hc_xAxis(title = list(text = "Calendar week")) %>%
   hc_colorAxis(stops = color_stops(10, rev(RColorBrewer::brewer.pal(10, "RdBu")))) %>%
   hc_tooltip(formatter = tooltip) %>%
+  hc_add_theme(hc_theme_google())
+hc
+```
+
+
+Last activity
+=======================================================================
+Row {.tabset .tabset-fade}
+-----------------------------------------------------------------------
+### Last activity Running
+```{r}
+run_latest_id <- get_latest_activity(yearly_activites, "Run")
+run_stream <- get_streams(stoken, id = run_latest_id)
+run_stream_df <- stream_to_df(run_stream)
+
+hc <- highchart() %>% 
+  hc_chart(type = "line") %>%
+  hc_xAxis(title = list(text = "Distance in meters")) %>%
+  hc_yAxis_multiples(
+    list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
+    list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
+  ) %>% 
+  hc_add_series(yAxis=1, run_stream_df, "area", hcaes(x=distance, y=column_name),
+                name = "Altitude", color = "gray") %>%
+  hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
+  hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=cadence), name = "Cadence") %>%
+  hc_tooltip(sort = TRUE, table = TRUE) %>%
+  hc_add_theme(hc_theme_google())
+hc
+```
+
+### Last activity Nordic-ski
+```{r}
+ski_latest_id <- get_latest_activity(yearly_activites, "NordicSki")
+ski_stream <- get_streams(stoken, id = ski_latest_id)
+ski_stream_df <- stream_to_df(ski_stream)
+
+hc <- highchart() %>% 
+  hc_chart(type = "line") %>%
+  hc_xAxis(title = list(text = "Distance in meters")) %>%
+  hc_yAxis_multiples(
+    list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
+    list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
+  ) %>% 
+  hc_add_series(yAxis=1, ski_stream_df, "area", hcaes(x=distance, y=column_name),
+                name = "Altitude", color = "gray") %>%
+  hc_add_series(yAxis=0, ski_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
+  hc_tooltip(sort = TRUE, table = TRUE) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
