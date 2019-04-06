@@ -2,7 +2,7 @@ Authors@R: person("Rafael", "Schlatter", email = "rafaelschlatter@gmail.com", ro
 Description: R flex dashboard to analyze Strava activities.
 URL: https://github.com/rafaelschlatter/strava-flex
 Depends:
-    R (== 3.1.2)
+    R (== 3.3.3)
 Remotes:
     fawda123/rStrava
 Imports:
@@ -11,4 +11,3 @@ Imports:
     highcharter
     dplyr
     tidyr
-    knitr

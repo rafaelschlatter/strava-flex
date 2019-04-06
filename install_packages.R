@@ -5,5 +5,5 @@ install <- function(packages){
   sapply(packages, require, character.only = TRUE)
 }
 
-required.packages <- c("flexdashboard", "rStrava", "jsonlite", "highcharter", "dplyr", "tidyr", "knitr")
+required.packages <- c("flexdashboard", "rStrava", "jsonlite", "highcharter", "dplyr", "tidyr")
 install(required.packages)
