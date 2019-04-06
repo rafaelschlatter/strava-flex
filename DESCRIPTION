@@ -1,0 +1,12 @@
+Authors@R: person("Rafael", "Schlatter", email = "rafaelschlatter@gmail.com", role = c("aut", "cre"))
+Description: R flex dashboard to analyze Strava activities.
+URL: https://github.com/rafaelschlatter/strava-flex
+Depends: R (>= 3.1.2)
+Imports:
+    flexdashboard
+    jsonlite
+    highcharter
+    dplyr
+    tidyr
+    knitr
+    rStrava
