@@ -1,2 +1,10 @@
 language: r
-cache: packages
+r_github_packages:
+  - fawda123/rStrava
+r_packages:
+  - flexdashboard
+  - jsonlite
+  - highcharter
+  - dplyr
+  - tidyr
+  - knitr
