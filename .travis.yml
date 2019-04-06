@@ -1,0 +1,9 @@
+language: r
+r_packages:
+  - flexdashboard
+  - jsonlite
+  - highcharter
+  - dplyr
+  - tidyr
+  - knitr
+  - rStrava
