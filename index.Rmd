@@ -34,15 +34,20 @@ y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.
 y_2019 <- subset(df, calendar_date > as.Date("2018-12-31"))
 yearly_activites <- y_2019
 
+remove_latlng <- function(stream) {
+  for (i in seq(length(stream))) {
+    if (toString(stream[[i]]["type"]) == "latlng") {
+      stream[[i]] <- NULL
+      break
+    }
+  }
+  return(stream)
+}
+
 stream_to_df <- function(stream) {
   for (i in seq(length(stream))) {
     column_name = toString(stream[[i]]["type"])
     column_data = unlist(stream[[i]]["data"])
-
-    # because cannot deal with this type yet
-    if (column_name == "latlng") {
-      next
-    }
     if (i == 1) {
       df <- data.frame(column_name=column_data)
     }
@@ -205,7 +210,8 @@ Row {.tabset .tabset-fade}
 ```{r}
 run_latest_id <- get_latest_activity(yearly_activites, "Run")
 run_stream <- get_streams(stoken, id = run_latest_id)
-run_stream_df <- stream_to_df(run_stream)
+run_stream_clean <- remove_latlng(run_stream)
+run_stream_df <- stream_to_df(run_stream_clean)
 
 hc <- highchart() %>% 
   hc_chart(type = "line") %>%
@@ -214,7 +220,7 @@ hc <- highchart() %>%
     list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
     list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
   ) %>% 
-  hc_add_series(yAxis=1, run_stream_df, "area", hcaes(x=distance, y=column_name),
+  hc_add_series(yAxis=1, run_stream_df, "area", hcaes(x=distance, y=altitude),
                 name = "Altitude", color = "gray") %>%
   hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
   hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=cadence), name = "Cadence") %>%
@@ -227,7 +233,8 @@ hc
 ```{r}
 ski_latest_id <- get_latest_activity(yearly_activites, "NordicSki")
 ski_stream <- get_streams(stoken, id = ski_latest_id)
-ski_stream_df <- stream_to_df(ski_stream)
+ski_stream_clean <- remove_latlng(ski_stream)
+ski_stream_df <- stream_to_df(ski_stream_clean)
 
 hc <- highchart() %>% 
   hc_chart(type = "line") %>%
@@ -236,7 +243,7 @@ hc <- highchart() %>%
     list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
     list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
   ) %>% 
-  hc_add_series(yAxis=1, ski_stream_df, "area", hcaes(x=distance, y=column_name),
+  hc_add_series(yAxis=1, ski_stream_df, "area", hcaes(x=distance, y=altitude),
                 name = "Altitude", color = "gray") %>%
   hc_add_series(yAxis=0, ski_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
   hc_tooltip(sort = TRUE, table = TRUE) %>%
