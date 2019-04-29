@@ -52,6 +52,11 @@ Sidebar {.sidebar}
 **Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)`hrs  
 **Number of activities**: `r length(df$id)`
 
+### Year-to-date Statistics
+**Distance**: `r round(sum(yearly_activites$distance))`km  
+**Activity time**: `r round(sum(yearly_activites$elapsed_time) / (60*60), 2)`hrs  
+**Number of activities**: `r length(yearly_activites$id)`
+
 Year-to-date statistics
 =======================================================================
 Row {data-height = 350}
@@ -74,22 +79,7 @@ Your current weekly activity goal is set to `r strava_goals$weekly_min` min.
 ```{r}
 current_date <- Sys.Date()
 current_day <- weekdays(current_date)
-
-if (current_day == "Monday") {
-  weekstart <- current_date
-} else if (current_day == "Tuesday") {
-  weekstart <- current_date - 1
-} else if (current_day == "Wednesday") {
-  weekstart <- current_date - 2
-} else if (current_day == "Thursday") {
-  weekstart <- current_date - 3
-} else if (current_day == "Friday") {
-  weekstart <- current_date - 4
-} else if (current_day == "Saturday") {
-  weekstart <- current_date - 5
-} else {
-  weekstart <- current_date - 6
-}
+weekstart <- get_weekstart(current_date, current_day)
 
 weekly_activites = subset(df, calendar_date > weekstart)
 weekly_min = round(sum(weekly_activites$elapsed_time) / 60)

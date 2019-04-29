@@ -1,3 +1,23 @@
+get_weekstart <- function(current_date, current_day) {
+  if (current_day == "Monday") {
+    weekstart <- current_date
+  } else if (current_day == "Tuesday") {
+    weekstart <- current_date - 1
+  } else if (current_day == "Wednesday") {
+    weekstart <- current_date - 2
+  } else if (current_day == "Thursday") {
+    weekstart <- current_date - 3
+  } else if (current_day == "Friday") {
+    weekstart <- current_date - 4
+  } else if (current_day == "Saturday") {
+    weekstart <- current_date - 5
+  } else {
+    weekstart <- current_date - 6
+  }
+  return(weekstart)
+}
+
+
 remove_latlng <- function(stream) {
   for (i in seq(length(stream))) {
     if (toString(stream[[i]]["type"]) == "latlng") {
