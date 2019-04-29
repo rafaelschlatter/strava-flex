@@ -39,6 +39,7 @@ Create a json file with the below structure, and save it in the same directory a
 All dependencies are handled in the `install_packages.R` file. Set your working directory to the folder that contains `index.Rmd` an run:
 
 ```r
+setwd("your/path/strava-flex")
 rmarkdown::run()
 ```
 
