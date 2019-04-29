@@ -30,11 +30,10 @@ y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.
 y_2019 <- subset(df, calendar_date > as.Date("2018-12-31"))
 yearly_activites <- y_2019
 
-
-run_latest_id <- get_latest_activity(yearly_activites, "Run")
-run_stream <- get_streams(stoken, id = run_latest_id)
-run_stream_clean <- remove_latlng(run_stream)
-run_stream_df <- stream_to_df(run_stream_clean)
+latest_id <- get_latest_activity(yearly_activites, "Run")
+stream <- get_streams(stoken, id = latest_id)
+stream_clean <- remove_latlng(stream)
+stream_df <- stream_to_df(stream_clean)
 ```
 
 Sidebar {.sidebar}
@@ -106,7 +105,11 @@ tooltip <- JS("function(){
 
 hc <- highchart() %>% 
   hc_chart(type = "pie") %>% 
-  hc_add_series(name = "Activity type", data = activity_types$type, dataLabels = list(enabled = TRUE)) %>%
+  hc_add_series(
+    name = "Activity type",
+    data = activity_types$type,
+    dataLabels = list(enabled = TRUE)
+  ) %>%
   hc_yAxis(categories = c(activity_types$type)) %>%
   hc_tooltip(formatter = tooltip) %>%
   hc_add_theme(hc_theme_google())
@@ -122,22 +125,22 @@ monthly_dist_wide <- spread(monthly_dist, type, dist)
 monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
 monthly_dist_wide <- monthly_dist_wide[order(monthly_dist_wide$month), ]
 
-
 hc <- highchart() %>% 
   hc_chart(type = "column") %>% 
-  hc_plotOptions(column = list(
-    stacking = "normal")
-  ) %>% 
+  hc_plotOptions(column = list(stacking = "normal")) %>% 
   hc_xAxis(categories = monthly_dist_wide$month) %>% 
-  hc_yAxis(min = 0, title = list(text = "Total distance in km"),
-           plotLines = list(
-                 list(
-                   label = list(text = "Goal"),
-                   color = "red",
-                   width = 2,
-                   value = strava_goals$montly_km
-                   )
-                 )) %>%
+  hc_yAxis(
+    min = 0,
+    title = list(text = "Total distance in km"),
+    plotLines = list(
+      list(
+        label = list(text = "Goal"),
+        color = "red",
+        width = 2,
+        value = strava_goals$montly_km
+      )
+    )
+  ) %>%
   hc_series(list(name = "Running (km)", data = monthly_dist_wide$Run),
             list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki))  %>%
   hc_add_theme(hc_theme_google())
@@ -177,10 +180,28 @@ hc <- highchart() %>%
     list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
     list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
   ) %>% 
-  hc_add_series(yAxis=1, run_stream_df, "area", hcaes(x=distance, y=altitude),
-                name = "Altitude", color = "gray") %>%
-  hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
-  hc_add_series(yAxis=0, run_stream_df, "line", hcaes(x=distance, y=cadence), name = "Cadence") %>%
+  hc_add_series(
+    yAxis=1,
+    stream_df,
+    "area",
+    hcaes(x=distance, y=altitude),
+    name = "Altitude",
+    color = "gray"
+  ) %>%
+  hc_add_series(
+    yAxis=0,
+    stream_df,
+    "line",
+    hcaes(x=distance, y=heartrate),
+    name = "Heartrate"
+  ) %>%
+  hc_add_series(
+    yAxis=0,
+    stream_df,
+    "line",
+    hcaes(x=distance, y=cadence),
+    name = "Cadence"
+  ) %>%
   hc_tooltip(sort = TRUE, table = TRUE) %>%
   hc_add_theme(hc_theme_google())
 hc
@@ -195,17 +216,19 @@ Row {data-height=400}
 
 ### Heart rate zones
 ```{r}
-hr_data <- run_stream_df$heartrate
+hr_data <- stream_df$heartrate
 max_hr <- calculate_max_heartrate(strava_athlete$birthdate)
-hr_zones = calculate_heartrate_zone(max_hr, run_stream_df$heartrate)
+hr_zones = calculate_heartrate_zone(max_hr, stream_df$heartrate)
 
 hc <- highchart() %>%
   hc_chart(type = "column") %>% 
   hc_xAxis(categories = levels(hr_zones)) %>%
-  hc_add_series(hr_zones,
-                showInLegend = FALSE,
-                colorByPoint = TRUE,
-                colors = c("blue", "green", "yellow", "orange", "red")) %>%
+  hc_add_series(
+    hr_zones,
+    showInLegend = FALSE,
+    colorByPoint = TRUE,
+    colors = c("blue", "green", "yellow", "orange", "red")
+  ) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
