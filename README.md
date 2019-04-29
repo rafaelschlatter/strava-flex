@@ -28,6 +28,9 @@ Create a json file with the below structure, and save it in the same directory a
     "yearly_km": YOUR-YEARLY-KM-GOAL,
     "monthly_km": YOUR-MONTHLY-KM-GOAL,
     "weekly_min": YOUR-MIN-GOAL
+  },
+  "athlete": {
+    "birthdate": "YYYY-MM-DD"
   }
 }
 ```

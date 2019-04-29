@@ -14,6 +14,7 @@ source("install_packages.R")
 
 strava_keys = fromJSON('keys.json')$strava
 strava_goals = fromJSON('keys.json')$goals
+strava_athlete = fromJSON("keys.json")$athlete
 stoken <- httr::config(token = strava_oauth(strava_keys$app_name,
                                             strava_keys$client_id,
                                             strava_keys$client_secret,
@@ -62,6 +63,23 @@ get_latest_activity <- function(df, workout_type) {
   type_activities <- df[df$type == workout_type, ] 
   latest_id <- type_activities["id"][1, ]
   return(latest_id)
+}
+
+run_latest_id <- get_latest_activity(yearly_activites, "Run")
+run_stream <- get_streams(stoken, id = run_latest_id)
+run_stream_clean <- remove_latlng(run_stream)
+run_stream_df <- stream_to_df(run_stream_clean)
+
+calculate_max_heartrate <- function(birthdate) {
+  age <- round((as.numeric(Sys.Date() - as.Date(birthdate)) / 365))
+  return(220-age)
+}
+
+calculate_heartrate_zone <- function(max_hr, hr_data) {
+  breaks <- c(0.5*max_hr, 0.6*max_hr, 0.7*max_hr, 0.8*max_hr, 0.9*max_hr, 1*max_hr)
+  lables <- c("Very light", "Light", "Moderate", "Intense", "Maximum")
+  bins <- cut(hr_data, breaks = breaks, include.lowest = TRUE, right = FALSE, labels = lables)
+  return(bins)
 }
 ```
 
@@ -204,15 +222,10 @@ hc
 
 Last activity
 =======================================================================
-Row {.tabset .tabset-fade}
+Row {data-height=600}
 -----------------------------------------------------------------------
-### Last activity Running
+### Lastest activity
 ```{r}
-run_latest_id <- get_latest_activity(yearly_activites, "Run")
-run_stream <- get_streams(stoken, id = run_latest_id)
-run_stream_clean <- remove_latlng(run_stream)
-run_stream_df <- stream_to_df(run_stream_clean)
-
 hc <- highchart() %>% 
   hc_chart(type = "line") %>%
   hc_xAxis(title = list(text = "Distance in meters")) %>%
@@ -229,24 +242,27 @@ hc <- highchart() %>%
 hc
 ```
 
-### Last activity Nordic-ski
+Row {data-height=400}
+-----------------------------------------------------------------------
+### Activity info
 ```{r}
-ski_latest_id <- get_latest_activity(yearly_activites, "NordicSki")
-ski_stream <- get_streams(stoken, id = ski_latest_id)
-ski_stream_clean <- remove_latlng(ski_stream)
-ski_stream_df <- stream_to_df(ski_stream_clean)
+```
 
-hc <- highchart() %>% 
-  hc_chart(type = "line") %>%
-  hc_xAxis(title = list(text = "Distance in meters")) %>%
-  hc_yAxis_multiples(
-    list(title = list(text = "Heartrate / Cadence"), min=0, max=200),
-    list(title = list(text = "Altitude"), min=0, max=600, opposite = TRUE)
-  ) %>% 
-  hc_add_series(yAxis=1, ski_stream_df, "area", hcaes(x=distance, y=altitude),
-                name = "Altitude", color = "gray") %>%
-  hc_add_series(yAxis=0, ski_stream_df, "line", hcaes(x=distance, y=heartrate), name = "Heartrate") %>%
-  hc_tooltip(sort = TRUE, table = TRUE) %>%
+### Heart rate zones
+```{r}
+hr_data <- run_stream_df$heartrate
+max_hr <- calculate_max_heartrate(strava_athlete$birthdate)
+hr_zones = calculate_heartrate_zone(max_hr, run_stream_df$heartrate)
+
+hc <- highchart() %>%
+  hc_chart(type = "column") %>% 
+  hc_xAxis(categories = levels(hr_zones)) %>%
+  hc_yAxis(title = list(text = "Heartrate"))
+  hc_add_series(hr_zones,
+                showInLegend = FALSE,
+                colorByPoint = TRUE,
+                colors = c("blue", "green", "yellow", "orange", "red")) %>%
+  hc_plotOptions(groupPadding = 0) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
