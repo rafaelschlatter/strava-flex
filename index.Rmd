@@ -30,7 +30,8 @@ y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.
 y_2019 <- subset(df, calendar_date > as.Date("2018-12-31"))
 yearly_activites <- y_2019
 
-latest_id <- get_latest_activity(yearly_activites, "Run")
+latest_id <- get_latest_activity_id(yearly_activites, "Run")
+latest_activity <- get_activity_by_id(yearly_activites, latest_id)
 stream <- get_streams(stoken, id = latest_id)
 stream_clean <- remove_latlng(stream)
 stream_df <- stream_to_df(stream_clean)
@@ -47,13 +48,13 @@ Sidebar {.sidebar}
 **Latest activity**: `r yearly_activites[1,]$calendar_date`
 
 ### All-time Statistics
-**Distance**: `r round(sum(df$distance))`km  
-**Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)`hrs  
+**Distance**: `r round(sum(df$distance))` km  
+**Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)` hrs  
 **Number of activities**: `r length(df$id)`
 
 ### Year-to-date Statistics
-**Distance**: `r round(sum(yearly_activites$distance))`km  
-**Activity time**: `r round(sum(yearly_activites$elapsed_time) / (60*60), 2)`hrs  
+**Distance**: `r round(sum(yearly_activites$distance))` km  
+**Activity time**: `r round(sum(yearly_activites$elapsed_time) / (60*60), 2)` hrs  
 **Number of activities**: `r length(yearly_activites$id)`
 
 Year-to-date statistics
@@ -184,7 +185,7 @@ hc <- highchart() %>%
     yAxis=1,
     stream_df,
     "area",
-    hcaes(x=distance, y=altitude),
+    hcaes(x=distance, y=column_name),
     name = "Altitude",
     color = "gray"
   ) %>%
@@ -210,9 +211,15 @@ hc
 Row {data-height=400}
 -----------------------------------------------------------------------
 ### Activity info
-```{r}
+**Type**: `r latest_activity$type`  
+**Date**: `r latest_activity$calendar_date`  
+**Location**: `r latest_activity$location_country`  
+**Distance**: `r latest_activity$distance` km  
+**Elevation gain**: `r latest_activity$total_elevation_gain` m  
+**Time**: `r round((latest_activity$elapsed_time) / 60, 2)` min  
+**Avg. heartrate**: `r latest_activity$average_heartrate` bpm  
+**Max. heartrate**: `r latest_activity$max_heartrate` bpm  
 
-```
 
 ### Heart rate zones
 ```{r}

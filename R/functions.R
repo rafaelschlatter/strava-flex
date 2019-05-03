@@ -44,10 +44,16 @@ stream_to_df <- function(stream) {
 }
 
 
-get_latest_activity <- function(df, workout_type) {
+get_latest_activity_id <- function(df, workout_type) {
   type_activities <- df[df$type == workout_type, ] 
   latest_id <- type_activities["id"][1, ]
   return(latest_id)
+}
+
+
+get_activity_by_id <- function(df, id) {
+  activity <- df[df$id == id, ]
+  return(activity)
 }
 
 
