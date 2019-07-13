@@ -143,7 +143,8 @@ hc <- highchart() %>%
     )
   ) %>%
   hc_series(list(name = "Running (km)", data = monthly_dist_wide$Run),
-            list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki))  %>%
+            list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki),
+            list(name = "Cycling (km)", data = monthly_dist_wide$Ride))  %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
