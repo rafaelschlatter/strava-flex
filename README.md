@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/rafaelschlatter/strava-flex.svg?branch=master)](https://travis-ci.org/rafaelschlatter/strava-flex)
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 
-
 ## 1. Description
 A flex dashboard to visualize your Strava activities.
 ![screenshot](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot.png)
