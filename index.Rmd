@@ -77,15 +77,18 @@ Sidebar {.sidebar}
 **Distance (ride)**: `r round(sum(subset(yearly_activites, type == "Ride")$distance), 1)` km 
 
 
-Year-to-date statistics
+Year-to-date statistics {data-icon="fa-signal"}
 =======================================================================
 Row {data-height = 350}
 -----------------------------------------------------------------------
 ### Yearly goal
-Your current yearly km goal (running + skiing) is set to `r strava_goals$yearly_km`km.
 ```{r}
 current_distance = round(sum(subset(yearly_activites, type == "Run" | type == "NordicSki")$distance), digits = 1)
+```
 
+Your current yearly km goal (running + skiing) is set to `r strava_goals$yearly_km`km.
+Reached **`r round((current_distance / strava_goals$yearly_km) * 100, 2)`%** so far.
+```{r}
 first = strava_goals$yearly_km / 3
 second = first * 2
 
@@ -95,7 +98,6 @@ gauge(current_distance, min = 0, max = strava_goals$yearly_km, symbol = 'km', ga
 ```
 
 ### Weekly activity minutes
-Your current weekly activity goal (all activity types) is set to `r strava_goals$weekly_min` min.  
 ```{r}
 current_date <- Sys.Date()
 current_day <- weekdays(current_date)
@@ -103,7 +105,11 @@ weekstart <- get_weekstart(current_date, current_day)
 
 weekly_activites = subset(df, calendar_date > weekstart)
 weekly_min = round(sum(weekly_activites$elapsed_time) / 60)
+```
 
+Your current weekly activity goal (all activity types) is set to `r strava_goals$weekly_min` min.
+Reached **`r round((weekly_min / strava_goals$weekly_min) * 100, 2) `%** so far.
+```{r}
 first = strava_goals$weekly_min / 3
 second = first * 2
 
