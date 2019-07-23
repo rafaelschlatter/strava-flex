@@ -2,6 +2,11 @@
 [![Build Status](https://travis-ci.org/rafaelschlatter/strava-flex.svg?branch=master)](https://travis-ci.org/rafaelschlatter/strava-flex)
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 
+<a style="display:inline-block;background-color:#FC4C02;color:#fff;padding:5px 10px 5px 30px;font-size:11px;font-family:Helvetica, Arial, sans-serif;white-space:nowrap;text-decoration:none;background-repeat:no-repeat;background-position:10px center;border-radius:3px;background-image:url('http://badges.strava.com/logo-strava-echelon.png')" href='http://strava.com/athletes/24969674/badge' target="_clean">
+  Follow me on
+  <img src='http://badges.strava.com/logo-strava.png' alt='Strava' style='margin-left:2px;vertical-align:text-bottom' height=13 width=51 />
+</a>
+
 ## 1. Description
 A flex dashboard to visualize Strava activities. My app is hosted here: <https://rafaelschlatter.shinyapps.io/strava-flex/>
 
