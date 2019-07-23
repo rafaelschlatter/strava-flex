@@ -10,7 +10,18 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-source("R/install_packages.R")
+# Disabled because on shinyapps.io no packages can be installed by the user.
+# Use library() instead, shiny will install the required packages.
+
+#source("R/install_packages.R")
+library(flexdashboard)
+library(rStrava)
+library(jsonlite)
+library(highcharter)
+library(dplyr)
+library(tidyr)
+library(knitr)
+
 source("R/authenticate.R")
 source("R/functions.R")
 
@@ -248,4 +259,10 @@ hc <- highchart() %>%
   ) %>%
   hc_add_theme(hc_theme_google())
 hc
+```
+
+
+Performance
+=======================================================================
+```{r}
 ```
