@@ -48,6 +48,7 @@ stream_clean <- remove_latlng(stream)
 stream_df <- stream_to_df(stream_clean)
 ```
 
+
 Sidebar {.sidebar}
 =======================================================================
 ### Athlete Information
@@ -55,8 +56,13 @@ Sidebar {.sidebar}
 **Last name**: `r athlete$lastname`  
 **City**: `r athlete$city`  
 **Country**: `r athlete$country`  
+**Latest activity**: `r yearly_activites[1,]$calendar_date`  
 
-**Latest activity**: `r yearly_activites[1,]$calendar_date`
+<a style="display:inline-block;background-color:#FC4C02;color:#fff;padding:5px 10px 5px 30px;font-size:11px;font-family:Helvetica, Arial, sans-serif;white-space:nowrap;text-decoration:none;background-repeat:no-repeat;background-position:10px center;border-radius:3px;background-image:url('http://badges.strava.com/logo-strava-echelon.png')" href='http://strava.com/athletes/24969674/' target="_clean">
+  Follow me on
+  <img src='http://badges.strava.com/logo-strava.png' alt='Strava' style='margin-left:2px;vertical-align:text-bottom' height=13 width=51 />
+</a>  
+
 
 ### All-time Statistics
 **Distance (all)**: `r round(sum(df$distance), 1)` km  
@@ -195,7 +201,7 @@ hc
 ```
 
 
-Last activity
+Last activity {data-icon="fa-pulse"}
 =======================================================================
 Row {data-height=600}
 -----------------------------------------------------------------------
