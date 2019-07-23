@@ -3,7 +3,9 @@
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 
 ## 1. Description
-A flex dashboard to visualize your Strava activities.
+A flex dashboard to visualize Strava activities. My app is hosted here: <https://rafaelschlatter.shinyapps.io/strava-flex/>
+
+
 ![screenshot](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot.png)
 ![screenshot2](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot2.png)
 
