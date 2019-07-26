@@ -2,6 +2,7 @@
 title: "Strava-flex"
 output: 
   flexdashboard::flex_dashboard:
+    logo: resources/api_logo_pwrdBy_strava_stack_white.png
     theme: cosmo
     orientation: rows
     vertical_layout: fill
@@ -85,7 +86,7 @@ Sidebar {.sidebar}
 
 Year-to-date statistics {data-icon="fa-signal"}
 =======================================================================
-Row {data-height = 350}
+Row {data-height = 450}
 -----------------------------------------------------------------------
 ### Yearly goal
 ```{r}
@@ -149,9 +150,9 @@ hc <- highchart() %>%
 hc
 ```
 
-Row {data-height = 650}
+Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
-### Monthly distance (all activity types)
+### Weekly distance (all activity types)
 ```{r}
 weekly_dist <- group_by(yearly_activites, calendar_week, type) %>% summarize(dist = sum(distance))
 weekly_dist_wide <- spread(weekly_dist, type, dist)
@@ -182,21 +183,25 @@ hc <- highchart() %>%
 hc
 ```
 
-### Activity heatmap
+### Montly distance (all activity types)
 ```{r}
-heatmap_data <- group_by(yearly_activites, calendar_week, weekday) %>% summarize(dist = sum(distance))
-heatmap_data$weekday <- factor(heatmap_data$weekday, levels = c("Monday", "Tuesday", "Wednesday",
-                                                                "Thursday", "Friday", "Saturday", "Sunday"))
-
-tooltip <- JS("function(){
-  return 'Week ' + this.point.x + ', ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
-  'Distance: ' + Highcharts.numberFormat(this.point.value, 2) + 'km';
-}")
-
-hc <- hchart(heatmap_data, "heatmap", hcaes(x = calendar_week, y = weekday, value = dist)) %>%
-  hc_xAxis(title = list(text = "Calendar week")) %>%
-  hc_colorAxis(stops = color_stops(10, rev(RColorBrewer::brewer.pal(10, "Blues")))) %>%
-  hc_tooltip(formatter = tooltip) %>%
+monthly_dist <- group_by(yearly_activites, month, type) %>% summarize(dist = sum(distance))
+monthly_dist_wide <- spread(monthly_dist, type, dist)
+monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
+monthly_dist_wide <- monthly_dist_wide[order(monthly_dist_wide$month), ]
+hc <- highchart() %>% 
+  hc_chart(type = "areaspline") %>% 
+  hc_xAxis(
+    categories = monthly_dist_wide$month,
+    title = list(text = "Month")
+  ) %>% 
+  hc_yAxis(
+    min = 0,
+    title = list(text = "Total distance in km")
+  ) %>%
+  hc_series(list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki, color="#DB4437"),
+            list(name = "Cycling (km)", data = monthly_dist_wide$Ride, color="#F4B400"),
+            list(name = "Running (km)", data = monthly_dist_wide$Run, color="#4285F4"))  %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
