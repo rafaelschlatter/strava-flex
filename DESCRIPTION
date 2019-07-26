@@ -8,7 +8,6 @@ Description: Visualize Strava Activities
 Imports:
     shiny,
     flexdashboard,
-    rStrava,
     jsonlite,
     highcharter,
     dplyr,
