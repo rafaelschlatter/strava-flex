@@ -1,4 +1,4 @@
-Package: strava-flex
+Package: stravaflex
 Type: Shiny app
 Title: strava-flex
 Version: 0.1
