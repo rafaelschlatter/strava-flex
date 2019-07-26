@@ -153,30 +153,31 @@ Row {data-height = 650}
 -----------------------------------------------------------------------
 ### Monthly distance (all activity types)
 ```{r}
-monthly_dist <- group_by(yearly_activites, month, type) %>% summarize(dist = sum(distance))
-monthly_dist_wide <- spread(monthly_dist, type, dist)
-monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
-monthly_dist_wide <- monthly_dist_wide[order(monthly_dist_wide$month), ]
+weekly_dist <- group_by(yearly_activites, calendar_week, type) %>% summarize(dist = sum(distance))
+weekly_dist_wide <- spread(weekly_dist, type, dist)
+weekly_dist_wide <- weekly_dist_wide[order(weekly_dist_wide$calendar_week), ]
+weekly_dist_wide[is.na(weekly_dist_wide)] <- 0
+
+tooltip <- JS("function(){
+  return 'Calendar Week ' + this.point.x + ':<br>' +
+  'Distance: ' + this.point.y + 'km'
+}")
 
 hc <- highchart() %>% 
-  hc_chart(type = "column") %>% 
-  hc_plotOptions(column = list(stacking = "normal")) %>% 
-  hc_xAxis(categories = monthly_dist_wide$month) %>% 
+  hc_chart(type = "areaspline") %>%
+  hc_xAxis(
+    categories = weekly_dist_wide$month,
+    title = list(text = "Calender week"),
+    tickInterval = 2
+  ) %>% 
   hc_yAxis(
     min = 0,
-    title = list(text = "Total distance in km"),
-    plotLines = list(
-      list(
-        label = list(text = "Goal"),
-        color = "red",
-        width = 2,
-        value = strava_goals$montly_km
-      )
-    )
+    title = list(text = "Weekly distance in km")
   ) %>%
-  hc_series(list(name = "Running (km)", data = monthly_dist_wide$Run),
-            list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki),
-            list(name = "Cycling (km)", data = monthly_dist_wide$Ride))  %>%
+  hc_series(list(name = "Nordic Ski (km)", data = weekly_dist_wide$NordicSki, color="#DB4437"),
+            list(name = "Cycling (km)", data = weekly_dist_wide$Ride, color="#F4B400"),
+            list(name = "Running (km)", data = weekly_dist_wide$Run, color="#4285F4"))  %>%
+  hc_tooltip(formatter = tooltip) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
