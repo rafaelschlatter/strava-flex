@@ -17,6 +17,3 @@ apt_packages:
   
 git:
   depth: false
-  
-script:
-  - R -f deploy.R
