@@ -8,7 +8,7 @@ r:
 warnings_are_errors: false
 cache: packages
 
-r_github_packages: 
+remotes: 
   - fawda123/rStrava
 
 apt_packages:
