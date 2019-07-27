@@ -1,6 +1,20 @@
+dist: xenial
+sudo: false
+latex: false
 language: r
 r:
   - 3.4
 
+warnings_are_errors: false
 cache: packages
 remotes: fawda123/rStrava
+
+apt_packages:
+  - libgdal-dev
+  - libudunits2-dev
+  
+git:
+  depth: false
+  
+script:
+  - R -f deploy.R

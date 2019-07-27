@@ -1,5 +1,5 @@
 Package: stravaflex
-Type: Shiny app
+Type: Shiny
 Title: strava-flex
 Version: 0.1
 Authors@R: person("Rafael Daniel", "Schlatter", email = "rafaelschlatter@gmail.com", role = c("cre"))

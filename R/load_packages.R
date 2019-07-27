@@ -6,4 +6,15 @@ install <- function(packages){
 }
 
 required.packages <- c("flexdashboard", "rStrava", "jsonlite", "highcharter", "dplyr", "tidyr", "knitr")
-install(required.packages)
+
+# Because the shinyapps.io server does not allow calls to install_packages()
+#install(required.packages)
+
+# Use library() instead, shiny will install the required packages.
+library(flexdashboard)
+library(rStrava)
+library(jsonlite)
+library(highcharter)
+library(dplyr)
+library(tidyr)
+library(knitr)
