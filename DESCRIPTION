@@ -4,15 +4,6 @@ Title: strava-flex
 Version: 0.1
 Authors@R: person("Rafael Daniel", "Schlatter", email = "rafaelschlatter@gmail.com", role = c("cre"))
 Description: Visualize Strava Activities
-Imports:
-    shiny,
-    flexdashboard,
-    jsonlite,
-    highcharter,
-    dplyr,
-    tidyr,
-    knitr,
-    rsconnect
 Depends: R (>= 3.4.0)
 License: MIT
 LazyData: true

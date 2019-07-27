@@ -7,7 +7,17 @@ r:
 
 warnings_are_errors: false
 cache: packages
-remotes: fawda123/rStrava
+r_packages:
+  - shiny,
+  - flexdashboard,
+  - jsonlite,
+  - highcharter,
+  - dplyr,
+  - tidyr,
+  - knitr,
+  - rsconnect,
+  - rStrava
+#remotes: fawda123/rStrava
 
 apt_packages:
   - libgdal-dev
