@@ -7,20 +7,9 @@ r:
 
 warnings_are_errors: false
 cache: packages
-r_packages:
-  - shiny,
-  - flexdashboard,
-  - jsonlite,
-  - highcharter,
-  - dplyr,
-  - tidyr,
-  - knitr,
-  - rsconnect
 
 r_github_packages: 
   - fawda123/rStrava
-
-cran: http://cran.rstudio.com
 
 apt_packages:
   - libgdal-dev
