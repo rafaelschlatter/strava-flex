@@ -15,9 +15,12 @@ r_packages:
   - dplyr,
   - tidyr,
   - knitr,
-  - rsconnect,
-  - rStrava
-#remotes: fawda123/rStrava
+  - rsconnect
+
+r_github_packages: 
+  - fawda123/rStrava
+
+cran: http://cran.rstudio.com
 
 apt_packages:
   - libgdal-dev
