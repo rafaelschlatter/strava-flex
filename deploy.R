@@ -1,4 +1,5 @@
 library(rsconnect)
+source("./R/load_packages.R")
 
 # Set the account info for deployment.
 setAccountInfo(
