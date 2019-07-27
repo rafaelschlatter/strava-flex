@@ -1,4 +1,4 @@
-# strava-flex
+# Strava-flex
 [![Build Status](https://travis-ci.org/rafaelschlatter/strava-flex.svg?branch=master)](https://travis-ci.org/rafaelschlatter/strava-flex)
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 
@@ -9,7 +9,7 @@ A flex dashboard to visualize Strava activities. My app is hosted here: <https:/
 ![screenshot](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot.png)
 ![screenshot2](https://github.com/rafaelschlatter/strava-flex/blob/master/resources/screenshot2.png)
 
-## 2. Usage
+## 2. Setup
 ### 2.1 Register app with Strava
 To run the dasboard with your Strava data you need to register and API application with Strava.  
 
@@ -37,13 +37,22 @@ Create a json file with the below structure, and save it in the same directory a
   }
 }
 ```
-
-### 2.3 Run the dashboard
-All dependencies are handled in the `install_packages.R` file. Set your working directory to the folder that contains `index.Rmd` an run:
+## 3. Usage
+### 2.3 Run the dashboard locally
+All dependencies are handled in the `install_packages.R` file. Set your working directory to the folder that contains `index.Rmd` an run either of the two commands:
 
 ```r
 setwd("your/path/strava-flex")
 rmarkdown::run()
+shiny::runApp()
 ```
 
 A browser window opens and you will be automatically authenticated with Strava, the dashboard appears in a new window.
+
+### 2.4 Deploy to shinyapps.io
+Create a shinyapps.io account and follow the instructions here: <https://docs.rstudio.com/shinyapps.io/getting-started.html#deploying-applications>.
+**Note:** Any call to `install_packages()` will cause the deployment to fail. The shiny server will installs all packages referenced in a `library()` call. Then deploy the app with this command:
+
+````bash
+rsconnect::deployApp()
+````
