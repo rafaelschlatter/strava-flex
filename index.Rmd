@@ -271,4 +271,8 @@ hc
 
 Performance
 =======================================================================
-**Continuous deployment successfull!**
+### Avg. speed over time
+
+```{r}
+
+```
