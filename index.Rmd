@@ -21,10 +21,10 @@ athlete <- get_athlete(stoken)
 df <- compile_activities(activities)
 df$row <- seq.int(nrow(df))
 df$calendar_date <- as.Date(df$start_date)
-df$calendar_year <- lubridate::year(df$start_date)
-df$calendar_month <- lubridate::month(df$start_date)
-df$calendar_week <- lubridate::week(df$start_date)
-df$weekday <- weekdays(as.Date(df$start_date))
+df$calendar_year <- lubridate::year(df$calendar_date)
+df$calendar_month <- lubridate::month(df$calendar_date)
+df$calendar_week <- lubridate::isoweek(df$calendar_date)
+df$weekday <- weekdays(df$calendar_date)
 df$month <- month.name[df$calendar_month]
 
 y_2018 <- subset(df, calendar_date > as.Date("2017-12-31") & calendar_date < as.Date("2018-12-31"))
@@ -148,15 +148,11 @@ weekly_dist_wide <- spread(weekly_dist, type, dist)
 weekly_dist_wide <- weekly_dist_wide[order(weekly_dist_wide$calendar_week), ]
 weekly_dist_wide[is.na(weekly_dist_wide)] <- 0
 
-tooltip <- JS("function(){
-  return 'Calendar Week ' + this.point.x + ':<br>' +
-  'Distance: ' + this.point.y + 'km'
-}")
 
 hc <- highchart() %>% 
   hc_chart(type = "areaspline") %>%
   hc_xAxis(
-    categories = weekly_dist_wide$month,
+    categories = weekly_dist_wide$calendar_week,
     title = list(text = "Calender week"),
     tickInterval = 2
   ) %>% 
@@ -167,7 +163,6 @@ hc <- highchart() %>%
   hc_series(list(name = "Nordic Ski (km)", data = weekly_dist_wide$NordicSki, color="#DB4437"),
             list(name = "Cycling (km)", data = weekly_dist_wide$Ride, color="#F4B400"),
             list(name = "Running (km)", data = weekly_dist_wide$Run, color="#4285F4"))  %>%
-  hc_tooltip(formatter = tooltip) %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
