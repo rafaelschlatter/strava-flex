@@ -99,7 +99,7 @@ current_date <- Sys.Date()
 current_day <- weekdays(current_date)
 weekstart <- get_weekstart(current_date, current_day)
 
-weekly_activites = subset(df, calendar_date > weekstart)
+weekly_activites = subset(df, calendar_date >= weekstart)
 weekly_min = round(sum(weekly_activites$elapsed_time) / 60)
 ```
 
