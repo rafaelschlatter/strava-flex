@@ -71,8 +71,8 @@ for (id in all_ids){
 
 
 strava_map <- leaflet() %>%
-  #addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png')#FF33D4
-  addProviderTiles(providers$CartoDB.Positron) %>%
+  addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png') %>%
+  #addProviderTiles(providers$CartoDB.Positron) %>%
   setView(10.728123, 59.96588, zoom=11)
 
 for (id in all_ids){
