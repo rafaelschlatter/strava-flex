@@ -70,6 +70,7 @@ for (id in all_ids){
 }
 
 
+
 strava_map <- leaflet() %>%
   addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png') %>%
   #addProviderTiles(providers$CartoDB.Positron) %>%

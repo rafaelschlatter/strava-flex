@@ -274,7 +274,28 @@ hc
 Performance
 =======================================================================
 ### Avg. speed over time
-
 ```{r}
 
+```
+
+
+Heatmap
+=======================================================================
+### Tracks of all runs, rides and skiing.
+```{r}
+all_ids <- df$id
+df2 <- read.csv("data/df2.csv")
+
+strava_map <- leaflet() %>%
+  #addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png') %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(10.728123, 59.96588, zoom=11)
+
+for (id in all_ids){
+  data <- df2[df2$id == id, ]
+  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/2, weight=2.5)
+  #strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/3, weight=1.5)
+}
+
+strava_map
 ```
