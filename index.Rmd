@@ -73,7 +73,7 @@ Sidebar {.sidebar}
 **Distance (ride)**: `r round(sum(subset(yearly_activites, type == "Ride")$distance), 1)` km 
 
 
-Year-to-date statistics {data-icon="fa-signal"}
+Overview {data-icon="fa-signal"}
 =======================================================================
 Row {data-height = 450}
 -----------------------------------------------------------------------
@@ -139,6 +139,7 @@ hc <- highchart() %>%
 hc
 ```
 
+
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 ### Weekly distance (all activity types)
@@ -198,7 +199,7 @@ hc
 ```
 
 
-Last activity
+Last activity {data-icon="fa-chart-area"}
 =======================================================================
 Row {data-height=600}
 -----------------------------------------------------------------------
@@ -271,5 +272,5 @@ hc
 ```
 
 
-Performance
+Performance {data-icon="fa-chart-line"}
 =======================================================================
