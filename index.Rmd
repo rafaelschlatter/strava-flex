@@ -273,4 +273,3 @@ hc
 
 Performance
 =======================================================================
-**Continuous deployment successfull!**
