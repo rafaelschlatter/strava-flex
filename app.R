@@ -5,6 +5,7 @@ library(shiny)
 
 shinyApp(
   ui = fluidPage(
+    HTML('<meta name="viewport" content="width=1024">'),
     includeHTML(rmarkdown::render("index.Rmd"))),
   server = function(input, output) {
   }
