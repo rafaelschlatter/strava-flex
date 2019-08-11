@@ -139,6 +139,19 @@ hc <- highchart() %>%
 hc
 ```
 
+```{r}
+current_date <- Sys.Date()
+cutoff <- Sys.Date() - lubridate::weeks(4)
+all_activities <- nrow(subset(df, calendar_date >= cutoff))
+run_activities <- nrow(subset(df, calendar_date >= cutoff & type == "Run"))
+ride_activities <- nrow(subset(df, calendar_date >= cutoff & type == "Ride"))
+ski_activities <- nrow(subset(df, calendar_date >= cutoff & type == "NordicSki"))
+```
+
+### Activities during the last four weeks.  **Running:** `r run_activities`,  **Cycling:** `r ride_activities`,  **Nordic ski:** `r ski_activities`.   
+```{r}
+valueBox(all_activities, icon = "fa-walking")
+```
 
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
@@ -274,3 +287,7 @@ hc
 
 Performance {data-icon="fa-chart-line"}
 =======================================================================
+### Performance
+```{r}
+
+```
