@@ -1,5 +1,3 @@
-**NOTE: This app does not work anymore since caching the token and then reading the token from a file does not seem to work anymore.**
-
 # Strava-flex
 [![Build Status](https://travis-ci.org/rafaelschlatter/strava-flex.svg?branch=master)](https://travis-ci.org/rafaelschlatter/strava-flex)
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
