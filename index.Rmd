@@ -17,7 +17,7 @@ source("./R/functions.R")
 
 
 activities <- get_activity_list(stoken)
-athlete <- get_athlete(stoken)
+athlete <- get_athlete(stoken, id=24969674)
 df <- compile_activities(activities)
 df$row <- seq.int(nrow(df))
 df$calendar_date <- as.Date(df$start_date)
@@ -200,7 +200,7 @@ hc
 
 Last activity
 =======================================================================
-Row {data-height=600}
+Row
 -----------------------------------------------------------------------
 ### Lastest activity
 ```{r}
@@ -224,7 +224,17 @@ hc <- highchart() %>%
     stream_df,
     "line",
     hcaes(x=distance, y=heartrate),
-    name = "Heartrate"
+    name = "Heartrate",
+    zoneAxis = "x",
+    zones = list(
+      list(
+        value = 150,
+        color = "red"
+      ),
+      list(
+        color = "blue"
+      )
+    )
   ) %>%
   hc_add_series(
     yAxis=0,
@@ -238,7 +248,7 @@ hc <- highchart() %>%
 hc
 ```
 
-Row {data-height=400}
+Row
 -----------------------------------------------------------------------
 ### Activity info
 **Type**: `r latest_activity$type`  
@@ -283,19 +293,14 @@ Heatmap
 =======================================================================
 ### Tracks of all runs, rides and skiing.
 ```{r}
-all_ids <- df$id
-df2 <- read.csv("data/df2.csv")
 
 strava_map <- leaflet() %>%
-  #addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png') %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  setView(10.728123, 59.96588, zoom=11)
-
-for (id in all_ids){
-  data <- df2[df2$id == id, ]
-  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/2, weight=2.5)
-  #strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/3, weight=1.5)
-}
+  addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', group="Night") %>%
+  addProviderTiles(providers$CartoDB.Positron, group="Day") %>%
+  addMiniMap(
+    tiles=providers$CartoDB.Positron
+  ) %>%
+  setView(10.728123, 59.96588, zoom=12)
 
 strava_map
 ```

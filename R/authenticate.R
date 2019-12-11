@@ -7,7 +7,7 @@ stoken <- httr::config(
     strava_keys$app_name,
     strava_keys$client_id,
     strava_keys$client_secret,
-    app_scope = 'view_private',
+    app_scope = "activity:read_all",
     cache = TRUE
   )
 )
@@ -17,4 +17,4 @@ stoken <- httr::config(
 # the shiny server, where manuel accepting the request through Stravas website
 # is not possible. After running above code once locally, upload the whole directory
 # to shinyapps.io (super hacky, but worked for me at least).
-stoken <- httr::config(token = readRDS('.httr-oauth')[[1]])
+#stoken <- httr::config(token = readRDS('.httr-oauth')[[1]])
