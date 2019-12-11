@@ -51,7 +51,8 @@ compile_activity_streams <- function(streams, id = NULL){
   }
 }
 
-all_ids <- df$id
+df_2 <- subset(df, type != "Workout")
+all_ids <- df_2$id
 
 df2 <- data.frame(
   altitude=double(),
@@ -75,13 +76,44 @@ csv <- read.csv("data/df2.csv")
 strava_map <- leaflet() %>%
   addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', group="Night") %>%
   addProviderTiles(providers$CartoDB.Positron, group="Day") %>%
-  addMarkers(
-    lng=10.757820,
-    lat=59.980426,
-    popup="Deer, 3.8.2019",
-    label="Deer",
-    group="Animal sightings"
+  addMiniMap(
+    tiles=providers$CartoDB.Positron
   ) %>%
+  addLayersControl(
+    baseGroups = c("Day", "Night"),
+    #overlayGroups = c("Activities", "Animal sightings"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  setView(10.728123, 59.96588, zoom=11) %>%
+  addEasyButton(
+    easyButton(
+      icon="fa-globe", title="Zoom to Level 1",
+      onClick=JS("function(btn, map){ map.setZoom(4); }")
+    )
+  ) %>%
+  addEasyButton(
+    easyButton(
+      icon="fa-crosshairs", title="Locate Me",
+      onClick=JS("function(btn, map){ map.locate({setView: true}); }")
+    )
+  )
+
+for (id in all_ids){
+  data <- csv[csv$id == id, ]
+  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="red", opacity=1/2, weight=2, group="Activities")
+  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/3, weight=1, group="Activities")
+}
+
+strava_map
+
+
+addMarkers(
+  lng=10.757820,
+  lat=59.980426,
+  popup="Deer, 3.8.2019",
+  label="Deer",
+  group="Animal sightings"
+) %>%
   addMarkers(
     lng=10.760199,
     lat=59.980003,
@@ -145,32 +177,3 @@ strava_map <- leaflet() %>%
     label="White tailed eagle",
     group="Animal sightings"
   ) %>%
-  addMiniMap(
-    tiles=providers$CartoDB.Positron
-  ) %>%
-  addLayersControl(
-    baseGroups = c("Day", "Night"),
-    overlayGroups = c("Activities", "Animal sightings"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  setView(10.728123, 59.96588, zoom=11) %>%
-  addEasyButton(
-    easyButton(
-      icon="fa-globe", title="Zoom to Level 1",
-      onClick=JS("function(btn, map){ map.setZoom(4); }")
-    )
-  ) %>%
-  addEasyButton(
-    easyButton(
-      icon="fa-crosshairs", title="Locate Me",
-      onClick=JS("function(btn, map){ map.locate({setView: true}); }")
-    )
-  )
-
-for (id in all_ids){
-  data <- csv[csv$id == id, ]
-  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="red", opacity=1/2, weight=1.5, group="Activities")
-  strava_map <- addPolylines(strava_map, lng=data$lng, lat=data$lat , color="blue", opacity=1/3, weight=1, group="Activities")
-}
-
-strava_map
