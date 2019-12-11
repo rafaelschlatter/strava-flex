@@ -224,17 +224,7 @@ hc <- highchart() %>%
     stream_df,
     "line",
     hcaes(x=distance, y=heartrate),
-    name = "Heartrate",
-    zoneAxis = "x",
-    zones = list(
-      list(
-        value = 150,
-        color = "red"
-      ),
-      list(
-        color = "blue"
-      )
-    )
+    name = "Heartrate"
   ) %>%
   hc_add_series(
     yAxis=0,
