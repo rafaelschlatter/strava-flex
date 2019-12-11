@@ -5,3 +5,5 @@ index.html
 rsconnect/
 .Rproj.user
 .httr-oauth
+data/df2.csv
+*.html

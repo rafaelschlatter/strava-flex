@@ -17,7 +17,7 @@ source("./R/functions.R")
 
 
 activities <- get_activity_list(stoken)
-athlete <- get_athlete(stoken)
+athlete <- get_athlete(stoken, id=24969674)
 df <- compile_activities(activities)
 df$row <- seq.int(nrow(df))
 df$calendar_date <- as.Date(df$start_date)
@@ -73,7 +73,7 @@ Sidebar {.sidebar}
 **Distance (ride)**: `r round(sum(subset(yearly_activites, type == "Ride")$distance), 1)` km 
 
 
-Overview {data-icon="fa-signal"}
+Year-to-date statistics {data-icon="fa-signal"}
 =======================================================================
 Row {data-height = 450}
 -----------------------------------------------------------------------
@@ -139,20 +139,6 @@ hc <- highchart() %>%
 hc
 ```
 
-```{r}
-current_date <- Sys.Date()
-cutoff <- Sys.Date() - lubridate::weeks(4)
-all_activities <- nrow(subset(df, calendar_date >= cutoff))
-run_activities <- nrow(subset(df, calendar_date >= cutoff & type == "Run"))
-ride_activities <- nrow(subset(df, calendar_date >= cutoff & type == "Ride"))
-ski_activities <- nrow(subset(df, calendar_date >= cutoff & type == "NordicSki"))
-```
-
-### Activities during the last four weeks.  **Running:** `r run_activities`,  **Cycling:** `r ride_activities`,  **Nordic ski:** `r ski_activities`.   
-```{r}
-valueBox(all_activities, icon = "fa-walking")
-```
-
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 ### Weekly distance (all activity types)
@@ -212,9 +198,9 @@ hc
 ```
 
 
-Last activity {data-icon="fa-chart-area"}
+Last activity
 =======================================================================
-Row {data-height=600}
+Row
 -----------------------------------------------------------------------
 ### Lastest activity
 ```{r}
@@ -238,7 +224,17 @@ hc <- highchart() %>%
     stream_df,
     "line",
     hcaes(x=distance, y=heartrate),
-    name = "Heartrate"
+    name = "Heartrate",
+    zoneAxis = "x",
+    zones = list(
+      list(
+        value = 150,
+        color = "red"
+      ),
+      list(
+        color = "blue"
+      )
+    )
   ) %>%
   hc_add_series(
     yAxis=0,
@@ -252,7 +248,7 @@ hc <- highchart() %>%
 hc
 ```
 
-Row {data-height=400}
+Row
 -----------------------------------------------------------------------
 ### Activity info
 **Type**: `r latest_activity$type`  
@@ -285,9 +281,26 @@ hc
 ```
 
 
-Performance {data-icon="fa-chart-line"}
+Performance
 =======================================================================
-### Performance
+### Avg. speed over time
 ```{r}
 
+```
+
+
+Heatmap
+=======================================================================
+### Tracks of all runs, rides and skiing.
+```{r}
+
+strava_map <- leaflet() %>%
+  addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', group="Night") %>%
+  addProviderTiles(providers$CartoDB.Positron, group="Day") %>%
+  addMiniMap(
+    tiles=providers$CartoDB.Positron
+  ) %>%
+  setView(10.728123, 59.96588, zoom=12)
+
+strava_map
 ```
