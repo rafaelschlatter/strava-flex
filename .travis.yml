@@ -19,6 +19,5 @@ git:
   depth: false
 
 after_success:
-  - Rscript -e 'rsconnect::setAccountInfo(name="rafaelschlatter", token=Sys.getenv(shinyapps_token), secret=Sys.getenv(shinyapps_secret))'
+  - Rscript -e 'rsconnect::setAccountInfo(name="rafaelschlatter", token=Sys.getenv("shinyapps_token"), secret=Sys.getenv("shinyapps_secret"))'
   - Rscript -e 'rsconnect::deployApp()'
-  
