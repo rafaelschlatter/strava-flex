@@ -17,3 +17,8 @@ apt_packages:
   
 git:
   depth: false
+
+after_success:
+  - Rscript -e 'rsconnect::setAccountInfo(name="rafaelschlatter", token=$shinyapps_token, secret=$shinyapps_secret)'
+  - Rscript -e 'rsconnect::deployApp()'
+  
