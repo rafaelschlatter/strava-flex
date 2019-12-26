@@ -39,12 +39,11 @@ Create a json file with the below structure, and save it in the same directory a
 ```
 ## 3. Usage
 ### 2.3 Run the dashboard locally
-All dependencies are handled in the `install_packages.R` file. Set your working directory to the folder that contains `index.Rmd` an run either of the two commands:
+All dependencies are handled in the `install_packages.R` file. Set your working directory to the folder that contains `index.Rmd` an run these commands:
 
 ```r
 setwd("your/path/strava-flex")
 rmarkdown::run()
-shiny::runApp()
 ```
 
 A browser window opens and you will be automatically authenticated with Strava, the dashboard appears in a new window.
