@@ -12,7 +12,8 @@ Imports:
     dplyr,
     tidyr,
     knitr,
-    rsconnect
+    rsconnect,
+    rStrava
 Depends: R (>= 3.4.0)
 License: MIT
 LazyData: true
