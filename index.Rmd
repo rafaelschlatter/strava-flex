@@ -153,7 +153,6 @@ weekly_dist_wide$total_dist <- weekly_dist_wide$Canoeing +
   weekly_dist_wide$Ride +
   weekly_dist_wide$Run
 
-
 hc <- highchart() %>% 
   hc_chart(type = "areaspline") %>%
   hc_xAxis(
@@ -165,11 +164,16 @@ hc <- highchart() %>%
     min = 0,
     title = list(text = "Weekly distance in km")
   ) %>%
-  hc_series(list(name = "Nordic Ski (km)", data = weekly_dist_wide$NordicSki, color="#DB4437"),
-            list(name = "Cycling (km)", data = weekly_dist_wide$Ride, color="#F4B400"),
-            list(name = "Running (km)", data = weekly_dist_wide$Run, color="#4285F4"),
-            list(name = "Total (km)", data = weekly_dist_wide$total_dist, color = "gray",
-                 type="spline", dashStyle="dash"))  %>%
+  hc_series(
+    list(name = "Nordic Ski (km)", data = weekly_dist_wide$NordicSki,
+      color="#DB4437"
+    ),
+    list(name = "Cycling (km)", data = weekly_dist_wide$Ride, color="#F4B400"),
+    list(name = "Running (km)", data = weekly_dist_wide$Run, color="#4285F4"),
+    list(name = "Total (km)", data = weekly_dist_wide$total_dist, color="gray",
+      type="spline"
+    )
+  )  %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
@@ -190,9 +194,13 @@ hc <- highchart() %>%
     min = 0,
     title = list(text = "Total distance in km")
   ) %>%
-  hc_series(list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki, color="#DB4437"),
-            list(name = "Cycling (km)", data = monthly_dist_wide$Ride, color="#F4B400"),
-            list(name = "Running (km)", data = monthly_dist_wide$Run, color="#4285F4"))  %>%
+  hc_series(
+    list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki,
+      color="#DB4437"
+    ),
+    list(name = "Cycling (km)", data = monthly_dist_wide$Ride, color="#F4B400"),
+    list(name = "Running (km)", data = monthly_dist_wide$Run, color="#4285F4")
+  )  %>%
   hc_add_theme(hc_theme_google())
 hc
 ```
@@ -224,14 +232,16 @@ hc <- highchart() %>%
     stream_df,
     "line",
     hcaes(x=distance, y=heartrate),
-    name = "Heartrate"
+    name = "Heartrate",
+    color = "red"
   ) %>%
   hc_add_series(
     yAxis=0,
     stream_df,
     "line",
     hcaes(x=distance, y=cadence),
-    name = "Cadence"
+    name = "Cadence",
+    color = "blue"
   ) %>%
   hc_tooltip(sort = TRUE, table = TRUE) %>%
   hc_add_theme(hc_theme_google())
@@ -275,7 +285,13 @@ Performance
 =======================================================================
 ### Avg. speed over time
 ```{r}
+runs <- subset(yearly_activites, type=="Run")
 
+hc <- highchart() %>%
+  hc_chart(type="line") %>%
+  hc_add_series(runs$average_speed) %>%
+  hc_add_theme(hc_theme_google())
+hc
 ```
 
 
