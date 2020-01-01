@@ -31,6 +31,9 @@ one_year_ago <- Sys.Date() - 365
 last_52_weeks <- subset(df, calendar_date > as.Date(one_year_ago))
 yearly_activites <- last_52_weeks
 
+this_year <- format(Sys.Date(), "%Y")
+current_year_activities <- subset(df, calendar_year == this_year)
+
 latest_id <- get_latest_activity_id(yearly_activites, "Run")
 latest_activity <- get_activity_by_id(yearly_activites, latest_id)
 stream <- get_streams(stoken, id = latest_id)
@@ -54,6 +57,16 @@ Sidebar {.sidebar}
 </a>  
 
 
+### Year-to-date Statistics
+**Distance (all)**: `r round(sum(current_year_activities$distance), 1)` km  
+**Activity time**: `r round(sum(current_year_activities$elapsed_time) / (60*60), 2)` hrs  
+**Number of activities**: `r length(current_year_activities$id)`  
+
+**Distance (run)**: `r round(sum(subset(current_year_activities, type == "Run")$distance), 1)` km  
+**Distance (ski)**: `r round(sum(subset(current_year_activities, type == "NordicSki")$distance), 1)` km  
+**Distance (ride)**: `r round(sum(subset(current_year_activities, type == "Ride")$distance), 1)` km 
+
+
 ### All-time Statistics
 **Distance (all)**: `r round(sum(df$distance), 1)` km  
 **Activity time**: `r round(sum(df$elapsed_time) / (60*60), 2)` hrs  
@@ -63,15 +76,6 @@ Sidebar {.sidebar}
 **Distance (ski)**: `r round(sum(subset(df, type == "NordicSki")$distance), 1)` km  
 **Distance (ride)**: `r round(sum(subset(df, type == "Ride")$distance), 1)` km  
 
-### Year-to-date Statistics
-**Distance (all)**: `r round(sum(yearly_activites$distance), 1)` km  
-**Activity time**: `r round(sum(yearly_activites$elapsed_time) / (60*60), 2)` hrs  
-**Number of activities**: `r length(yearly_activites$id)`  
-
-**Distance (run)**: `r round(sum(subset(yearly_activites, type == "Run")$distance), 1)` km  
-**Distance (ski)**: `r round(sum(subset(yearly_activites, type == "NordicSki")$distance), 1)` km  
-**Distance (ride)**: `r round(sum(subset(yearly_activites, type == "Ride")$distance), 1)` km 
-
 
 Year-to-date statistics {data-icon="fa-signal"}
 =======================================================================
@@ -79,7 +83,11 @@ Row {data-height = 450}
 -----------------------------------------------------------------------
 ### Yearly goal
 ```{r}
-current_distance = round(sum(subset(yearly_activites, type == "Run" | type == "NordicSki")$distance), digits = 1)
+current_distance = round(sum(subset(
+  current_year_activities,
+  type == "Run" | type == "NordicSki")$distance),
+  digits = 1
+)
 ```
 
 Your current yearly km goal (running + skiing) is set to `r strava_goals$yearly_km`km.
