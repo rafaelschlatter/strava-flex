@@ -50,8 +50,8 @@ A browser window opens and you will be automatically authenticated with Strava, 
 
 ### 2.4 Deploy to shinyapps.io
 Create a shinyapps.io account and follow the instructions here: <https://docs.rstudio.com/shinyapps.io/getting-started.html#deploying-applications>.
-**Note:** Any call to `install_packages()` will cause the deployment to fail. The shiny server will installs all packages referenced in a `library()` call. Then deploy the app with this command:
+**Note:** Any call to `install_packages()` will cause the deployment to fail. The shiny server will installs all packages referenced in a `library()` call. Then deploy the app with this command (use `forceUpdate` if you want to overwrite an existing app):
 
 ````bash
-rsconnect::deployApp()
+rsconnect::deployApp(forceUpdate = TRUE)
 ````

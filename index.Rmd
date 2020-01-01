@@ -190,17 +190,17 @@ hc
 
 ### Montly distance (all activity types)
 ```{r}
-monthly_dist <- group_by(yearly_activites, calendar_year, month, type) %>% summarize(dist = sum(distance))
+monthly_dist <- group_by(yearly_activites, calendar_year, calendar_month, type) %>% summarize(dist = sum(distance))
 monthly_dist_wide <- spread(monthly_dist, type, dist)
-monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
-monthly_dist_wide <- monthly_dist_wide[order(c(monthly_dist_wide$calendar_year, monthly_dist_wide$month)), ]
+#monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
+monthly_dist_wide <- monthly_dist_wide[order(c(monthly_dist_wide$calendar_year, monthly_dist_wide$calendar_month)), ]
 monthly_dist_wide[is.na(monthly_dist_wide)] <- 0
 monthly_dist_wide <- subset(monthly_dist_wide, calendar_year != 0)
 
 hc <- highchart() %>% 
   hc_chart(type = "areaspline") %>% 
   hc_xAxis(
-    categories = monthly_dist_wide$month,
+    categories = monthly_dist_wide$calendar_month,
     title = list(text = "Month")
   ) %>% 
   hc_yAxis(
