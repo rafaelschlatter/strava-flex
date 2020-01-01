@@ -160,7 +160,6 @@ weekly_dist_wide$total_dist <- weekly_dist_wide$Canoeing +
   weekly_dist_wide$NordicSki +
   weekly_dist_wide$Ride +
   weekly_dist_wide$Run
-
 weekly_dist_wide <- subset(weekly_dist_wide, calendar_year != 0)
 
 hc <- highchart() %>% 
@@ -191,10 +190,13 @@ hc
 
 ### Montly distance (all activity types)
 ```{r}
-monthly_dist <- group_by(yearly_activites, month, type) %>% summarize(dist = sum(distance))
+monthly_dist <- group_by(yearly_activites, calendar_year, month, type) %>% summarize(dist = sum(distance))
 monthly_dist_wide <- spread(monthly_dist, type, dist)
 monthly_dist_wide$month <- factor(monthly_dist_wide$month, levels = month.name)
-monthly_dist_wide <- monthly_dist_wide[order(monthly_dist_wide$month), ]
+monthly_dist_wide <- monthly_dist_wide[order(c(monthly_dist_wide$calendar_year, monthly_dist_wide$month)), ]
+monthly_dist_wide[is.na(monthly_dist_wide)] <- 0
+monthly_dist_wide <- subset(monthly_dist_wide, calendar_year != 0)
+
 hc <- highchart() %>% 
   hc_chart(type = "areaspline") %>% 
   hc_xAxis(
