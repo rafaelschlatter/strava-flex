@@ -159,11 +159,15 @@ weekly_dist_wide$total_dist <- weekly_dist_wide$Canoeing +
   weekly_dist_wide$Hike +
   weekly_dist_wide$NordicSki +
   weekly_dist_wide$Ride +
-  weekly_dist_wide$Run
+  weekly_dist_wide$Run +
+  weekly_dist_wide$AlpineSki
 weekly_dist_wide <- subset(weekly_dist_wide, calendar_year != 0)
 
 hc <- highchart() %>% 
   hc_chart(type = "areaspline") %>%
+  hc_plotOptions(
+    aeraspline = list(marker=NULL)
+  ) %>%
   hc_xAxis(
     categories = weekly_dist_wide$calendar_week,
     title = list(text = "Calender week"),
@@ -177,6 +181,7 @@ hc <- highchart() %>%
     list(name = "Nordic Ski (km)", data = weekly_dist_wide$NordicSki,
       color="#DB4437"
     ),
+    list(name = "Alpine Ski (km)", data = weekly_dist_wide$AlpineSki),
     list(name = "Cycling (km)", data = weekly_dist_wide$Ride, color="#F4B400"),
     list(name = "Running (km)", data = weekly_dist_wide$Run, color="#4285F4"),
     list(name = "Total (km)", data = weekly_dist_wide$total_dist, color="gray",
@@ -211,6 +216,7 @@ hc <- highchart() %>%
     list(name = "Nordic Ski (km)", data = monthly_dist_wide$NordicSki,
       color="#DB4437"
     ),
+    list(name = "Alpine Ski (km)", data = monthly_dist_wide$AlpineSki),
     list(name = "Cycling (km)", data = monthly_dist_wide$Ride, color="#F4B400"),
     list(name = "Running (km)", data = monthly_dist_wide$Run, color="#4285F4")
   )  %>%
