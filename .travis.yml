@@ -11,7 +11,9 @@ cache:
   packages: true
 
 install:
-  - R -e "0" --args --bootstrap-packrat
+  - R -e "install.packages('devtools')"
+  - R -e "devtools::install_github('fawda123/rStrava')"
+  - R -e "install.packages('flexdashboard', 'jsonlite', 'highcharter', 'dplyr', 'tidyr', 'knitr', 'htmltools')"
   
 git:
   depth: false
