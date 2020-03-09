@@ -6,14 +6,13 @@ r:
   - 3.4
 
 warnings_are_errors: false
-cache: packages
+cache:
+  directories: $TRAVIS_BUILD_DIR/packrat/
+  packages: true
 
-remotes: 
-  - fawda123/rStrava
-
-apt_packages:
-  - libgdal-dev
-  - libudunits2-dev
+install:
+  - R -e "0" --args --bootstrap-packrat
+  - R -e "packrat::restore(restart = FALSE)"
   
 git:
   depth: false

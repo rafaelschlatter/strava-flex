@@ -8,4 +8,3 @@ rsconnect/
 data/df2.csv
 *.html
 packrat/lib*/
-packrat/src/
