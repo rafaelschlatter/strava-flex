@@ -25,4 +25,4 @@ git:
 after_success:
   - Rscript -e "install.packages('rsconnect')"
   - Rscript -e 'rsconnect::setAccountInfo(name="rafaelschlatter", token=Sys.getenv("shinyapps_token"), secret=Sys.getenv("shinyapps_secret"))'
-  - Rscript -e 'rsconnect::deployApp()'
+  - Rscript -e 'rsconnect::deployApp(forceUpdate = TRUE)'
