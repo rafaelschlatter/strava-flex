@@ -10,10 +10,11 @@ cache:
   directories: $TRAVIS_BUILD_DIR/packrat/
   packages: true
 
+before_install:
+  - sudo apt-get install libv8-dev
+
 install:
-  - R -e "install.packages('devtools')"
-  - R -e "devtools::install_github('fawda123/rStrava')"
-  - R -e "install.packages('flexdashboard', 'jsonlite', 'highcharter', 'dplyr', 'tidyr', 'knitr', 'htmltools')"
+  - R -e "0" --args --bootstrap-packrat
   
 git:
   depth: false
