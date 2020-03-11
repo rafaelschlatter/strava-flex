@@ -1,6 +1,8 @@
-strava_keys = fromJSON('keys.json')$strava
-strava_goals = fromJSON('keys.json')$goals
-strava_athlete = fromJSON("keys.json")$athlete
+strava_keys <- list(
+  app_name=Sys.getenv("app_name"),
+  client_id=Sys.getenv("client_id"),
+  client_secret=Sys.getenv("client_secret")
+)
 
 stoken <- httr::config(
   token = strava_oauth(

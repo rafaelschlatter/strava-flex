@@ -39,6 +39,9 @@ latest_activity <- get_activity_by_id(yearly_activites, latest_id)
 stream <- get_streams(stoken, id = latest_id)
 stream_clean <- remove_latlng(stream)
 stream_df <- stream_to_df(stream_clean)
+
+strava_goals <- list(yearly_km=365, montly_km=30, weekly_min=150)
+strava_athlete <- list(birthdate="1991-01-24")
 ```
 
 
