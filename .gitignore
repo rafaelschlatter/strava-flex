@@ -4,6 +4,6 @@ index.html
 .Rhistory
 rsconnect/
 .Rproj.user
-.httr-oauth
 data/df2.csv
 *.html
+packrat/lib*/
