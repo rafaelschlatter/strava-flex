@@ -3,7 +3,7 @@ sudo: false
 latex: false
 language: r
 r:
-  - 3.4
+  - 3.6.3
 
 warnings_are_errors: false
 cache:
