@@ -51,8 +51,11 @@ compile_activity_streams <- function(streams, id = NULL){
   }
 }
 
+
 df_2 <- subset(df, type != "Workout")
-all_ids <- df_2$id
+df_3 <- subset(df_2, external_id != "NA")
+df_4 <- subset(df_3, start_latitude != "NA")
+all_ids <- df_4$id
 
 df2 <- data.frame(
   altitude=double(),
@@ -64,6 +67,7 @@ df2 <- data.frame(
 
 for (id in all_ids){
   stream <- get_streams(stoken, id=id)
+  print(id)
   compiled_stream <- compile_activity_streams(stream)
   compiled_stream$id <- rep(id, nrow(compiled_stream))
   subset_df <- subset(compiled_stream, select=c("altitude", "lat", "lng", "id"))

@@ -53,5 +53,10 @@ Create a shinyapps.io account and follow the instructions here: <https://docs.rs
 **Note:** Any call to `install_packages()` will cause the deployment to fail. The shiny server will installs all packages referenced in a `library()` call. Then deploy the app with this command (use `forceUpdate` if you want to overwrite an existing app):
 
 ````r
+rsconnect::setAccountInfo(
+  name=<your-account-name>,
+  token=<your-token>,
+  secret=<your-secret>
+)
 rsconnect::deployApp(forceUpdate = TRUE)
 ````
