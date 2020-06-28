@@ -318,33 +318,3 @@ Row
 ### Monthly history
 ```{r}
 ```
-
-Performance
-=======================================================================
-### Avg. speed over time
-```{r}
-runs <- subset(yearly_activites, type=="Run")
-
-hc <- highchart() %>%
-  hc_chart(type="line") %>%
-  hc_add_series(runs$average_speed) %>%
-  hc_add_theme(hc_theme_google())
-hc
-```
-
-
-Heatmap
-=======================================================================
-### Tracks of all runs, rides and skiing.
-```{r}
-
-strava_map <- leaflet() %>%
-  addTiles('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', group="Night") %>%
-  addProviderTiles(providers$CartoDB.Positron, group="Day") %>%
-  addMiniMap(
-    tiles=providers$CartoDB.Positron
-  ) %>%
-  setView(10.728123, 59.96588, zoom=12)
-
-strava_map
-```
