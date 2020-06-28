@@ -159,8 +159,7 @@ weekly_dist <- group_by(yearly_activites, calendar_year, calendar_week, type) %>
 weekly_dist_wide <- spread(weekly_dist, type, dist)
 weekly_dist_wide <- weekly_dist_wide[order(c(weekly_dist_wide$calendar_year, weekly_dist_wide$calendar_week)), ]
 weekly_dist_wide[is.na(weekly_dist_wide)] <- 0
-weekly_dist_wide$total_dist <- weekly_dist_wide$Canoeing +
-  weekly_dist_wide$Hike +
+weekly_dist_wide$total_dist <- weekly_dist_wide$Hike +
   weekly_dist_wide$NordicSki +
   weekly_dist_wide$Ride +
   weekly_dist_wide$Run +

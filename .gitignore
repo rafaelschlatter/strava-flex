@@ -2,6 +2,7 @@ keys.json
 *.DS_Store
 index.html
 .Rhistory
+.httr-oauth
 rsconnect/
 .Rproj.user
 data/df2.csv
