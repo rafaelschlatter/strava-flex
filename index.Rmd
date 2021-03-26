@@ -162,8 +162,8 @@ weekly_dist_wide[is.na(weekly_dist_wide)] <- 0
 weekly_dist_wide$total_dist <- weekly_dist_wide$Hike +
   weekly_dist_wide$NordicSki +
   weekly_dist_wide$Ride +
-  weekly_dist_wide$Run +
-  weekly_dist_wide$AlpineSki
+  weekly_dist_wide$Run
+  #weekly_dist_wide$AlpineSki
 weekly_dist_wide <- subset(weekly_dist_wide, calendar_year != 0)
 
 hc <- highchart() %>% 
